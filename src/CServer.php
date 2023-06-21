@@ -44,6 +44,7 @@ namespace HF\CacheHelper
 
     private static function addPurge($uri)
     {
+      self::init();
       $curl = self::$handles[] = curl_init(get_site_url() . $uri);
       curl_setopt_array($curl,
       [
@@ -58,8 +59,6 @@ namespace HF\CacheHelper
 
     public static function purgeAll()
     {
-      self::init();
-
       // purge all makes individual URI purges useless
       // so remove any if they exist
       foreach(self::$handles as $curl)
@@ -77,20 +76,17 @@ namespace HF\CacheHelper
 
     public static function purgeURI($uri)
     {
+      if ($uri[0] != '/')
+        $uri = '/' . $uri;
+
+      if (self::$purgeAll)
+        return;
+
       // prevent duplicate purges
       if (in_array($uri, self::$pending))
         return;
       self::$pending[] = $uri;
 
-      if (self::$purgeAll)
-        return;
-
-      self::init();
-
-      if ($uri[0] != '/')
-        $uri = '/' . $uri;
-
-      return;
       self::addPurge("/purge" . $uri);
     }
 
