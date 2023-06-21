@@ -42,13 +42,13 @@ namespace HF\CacheHelper
       curl_multi_close(self::$multi);
     }
 
-    private static function addPurge($uri)
+    private static function addPurge($uri, $method = 'GET')
     {
       self::init();
       $curl = self::$handles[] = curl_init(get_site_url() . $uri);
       curl_setopt_array($curl,
       [
-        CURLOPT_CUSTOMREQUEST        => "PURGE",
+        CURLOPT_CUSTOMREQUEST        => $method,
         CURLOPT_FOLLOWLOCATION       => true,
         CURLOPT_RETURNTRANSFER       => true,
         CURLOPT_DNS_USE_GLOBAL_CACHE => false,
@@ -67,7 +67,7 @@ namespace HF\CacheHelper
         curl_close($curl);
       }
 
-      self::addPurge("/purgeall");
+      self::addPurge('/purgeall', 'PURGE');
 
       // start execution immediately, there is no point waiting
       self::$purgeAll = true;
