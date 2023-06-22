@@ -128,7 +128,7 @@ namespace HF\CacheHelper
         $wpdb->query($stmt);
       }
 
-      if (!CNoCache::check())
+      if (!headers_sent() && !CNoCache::check())
       {
         // tell the backend to cache this page and provide the nonce data (if any)
         header("X-HF-Cache: 1");
