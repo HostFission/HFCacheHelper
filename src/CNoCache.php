@@ -20,13 +20,20 @@ namespace HF\CacheHelper
         apply_filters('do_not_cache', false);
     }
 
-    // if WooCommerce is installed and has an active session
-    // and has items in the cart
     private static function wooCommerce()
     {
       if (!class_exists('WooCommerce'))
         return false;
 
+      // never cache these pages
+      if (
+        is_cart               () ||
+        is_checkout           () ||
+        is_order_received_page() ||
+        is_account_page       ())
+      return true;
+
+      // do not cache if there is anything in the cart
       return isset(WC()->session) &&
         WC()->session->has_session() &&
         !WC()->cart->is_empty();
