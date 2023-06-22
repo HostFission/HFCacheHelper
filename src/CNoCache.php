@@ -10,7 +10,7 @@ namespace HF\CacheHelper
 
       return
         defined('XMLRPC_REQUEST')           ||
-        defined('DOING_RPC')                ||
+        defined('REST_REQUEST')             ||
         $_SERVER['REQUEST_METHOD'] != 'GET' ||
         !empty($_SESSION)                   ||
         is_user_logged_in()                 ||
