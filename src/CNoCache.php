@@ -18,8 +18,8 @@ namespace HF\CacheHelper
         $pagenow === 'wp-register.php'      ||
         is_admin()                          ||
         is_feed()                           ||
-        is_sitemap()                        ||
         self::wooCommerce()                 ||
+        self::isSitemap()                   ||
         apply_filters('do_not_cache', false);
     }
 
@@ -40,6 +40,13 @@ namespace HF\CacheHelper
       return isset(WC()->session) &&
         WC()->session->has_session() &&
         !WC()->cart->is_empty();
+    }
+
+    private static function isSitemap()
+    {
+      // there doesn't seem to be an eloquent way to do this
+      $current_url = $_SERVER['REQUEST_URI'];
+      return strpos($current_url, '/sitemap.xml') !== false;
     }
   }
 }
