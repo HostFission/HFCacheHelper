@@ -15,13 +15,13 @@ namespace HF\CacheHelper
   require_once(__DIR__ . '/src/CPurge.php');
   require_once(__DIR__ . '/src/CActions.php');
   require_once(__DIR__ . '/src/CAdmin.php');
+  require_once(__DIR__ . '/src/CNoCache.php');
 
   final class Plugin
   {
     private static $actions   = [];
     private static $internal  = false;
     private static $buffered  = false;
-    private static $rpc       = false;
     private static $activated = false;
 
     public static function init()
@@ -29,7 +29,6 @@ namespace HF\CacheHelper
       register_activation_hook  (__FILE__, [__CLASS__, 'activate'  ]);
       register_deactivation_hook(__FILE__, [__CLASS__, 'deactivate']);
 
-      add_action('rest_pre_serve_request', [__CLASS__, 'rpc'     ]);
       add_action('template_redirect'     , [__CLASS__, 'buffer'  ]);
       add_action('nonce_user_logged_out' , [__CLASS__, 'nonce'   ], 10, 2);
       add_action('shutdown'              , [__CLASS__, 'shutdown'], 0);
@@ -101,11 +100,6 @@ namespace HF\CacheHelper
       self::$buffered = true;
     }
 
-    public static function rpc()
-    {
-      self::$rpc = true;
-    }
-
     public static function nonce($uid, $action)
     {
       if ($uid            != 0 || // do not record logged in user nonces
@@ -134,7 +128,7 @@ namespace HF\CacheHelper
         $wpdb->query($stmt);
       }
 
-      if (!self::$rpc && !defined('XMLRPC_REQUEST') && !headers_sent() && !is_user_logged_in())
+      if (!CNoCache::check())
       {
         // tell the backend to cache this page and provide the nonce data (if any)
         header("X-HF-Cache: 1");
