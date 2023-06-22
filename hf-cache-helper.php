@@ -128,7 +128,7 @@ namespace HF\CacheHelper
         $wpdb->query($stmt);
       }
 
-      if (!headers_sent() && is_page())
+      if (!headers_sent())
       {
         $root_url    = site_url();
         $parsed_url  = parse_url( $root_url );
@@ -146,8 +146,11 @@ namespace HF\CacheHelper
           if (!empty($data))
             header("X-HF-Nonce: " . implode('|', $data));
 
-          // clear the bypass cookie
-          setcookie('_hf_nocache', '', time() - 315360000, $cookie_path);
+          // only clear the bypass cookie if it's not an error or the favicon
+          // we need to do this or when the browser fetches a missing resouce
+          // such as the favicon it will clear the cookie
+          if (!$wp_query->is_404() && !$wp_query->is_favicon())
+            setcookie('_hf_nocache', '', time() - 315360000, $cookie_path);
         }
       }
 
