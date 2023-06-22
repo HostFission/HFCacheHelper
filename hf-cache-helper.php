@@ -128,12 +128,27 @@ namespace HF\CacheHelper
         $wpdb->query($stmt);
       }
 
-      if (!headers_sent() && !CNoCache::check())
+      if (!headers_sent())
       {
-        // tell the backend to cache this page and provide the nonce data (if any)
-        header("X-HF-Cache: 1");
-        if (!empty($data))
-          header("X-HF-Nonce: " . implode('|', $data));
+        $root_url    = site_url();
+        $parsed_url  = parse_url( $root_url );
+        $cookie_path = isset( $parsed_url['path'] ) ? $parsed_url['path'] : '/';
+
+        if (CNoCache::check())
+        {
+          // set a cookie to tell the backend to bypass cache
+          setcookie('_hf_nocache', '1', time() + 315360000, $cookie_path);
+        }
+        else
+        {
+          // tell the backend to cache this page and provide the nonce data (if any)
+          header("X-HF-Cache: 1");
+          if (!empty($data))
+            header("X-HF-Nonce: " . implode('|', $data));
+
+          // clear the bypass cookie
+          setcookie('_hf_nocache', '', time() - 315360000, $cookie_path);
+        }
       }
 
       if (self::$buffered)
