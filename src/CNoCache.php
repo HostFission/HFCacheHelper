@@ -12,6 +12,7 @@ namespace HF\CacheHelper
         defined('XMLRPC_REQUEST')           ||
         defined('DOING_RPC')                ||
         $_SERVER['REQUEST_METHOD'] != 'GET' ||
+        !empty($_SESSION)                   ||
         is_user_logged_in()                 ||
         $pagenow === 'wp-login.php'         ||
         $pagenow === 'wp-register.php'      ||
