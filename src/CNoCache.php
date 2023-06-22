@@ -17,6 +17,8 @@ namespace HF\CacheHelper
         $pagenow === 'wp-login.php'         ||
         $pagenow === 'wp-register.php'      ||
         is_admin()                          ||
+        is_feed()                           ||
+        is_sitemap()                        ||
         self::wooCommerce()                 ||
         apply_filters('do_not_cache', false);
     }
