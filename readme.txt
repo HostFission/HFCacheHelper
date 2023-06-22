@@ -43,5 +43,5 @@ The `.hf-nonce.php` file is written as a hidden file (prefixed with a period) an
 
 == Changelog ==
 
-= v1.0.0 =
+= v0.1.0 =
 * Initial Release

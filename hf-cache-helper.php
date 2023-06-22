@@ -3,7 +3,7 @@
  Plugin Name: HostFission Cache Helper
  Plugin URI: https://hostfission.com
  Description: Works with the HostFission infrastructure to accelerate your website
- Version: 1.0
+ Version: 0.1.0
  Author: HostFission
  Author URI: https://hostfission.com
  License: GPLv2
