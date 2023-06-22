@@ -138,7 +138,7 @@ namespace HF\CacheHelper
         if (CNoCache::check())
         {
           // set a cookie to tell the backend to bypass cache
-          setcookie('_hf_nocache', '1', time() + 315360000, $cookie_path);
+          setcookie('hf_skip_cache', '1', time() + 315360000, $cookie_path);
         }
         else
         {
@@ -151,7 +151,7 @@ namespace HF\CacheHelper
           // we need to do this or when the browser fetches a missing resouce
           // such as the favicon it will clear the cookie
           if (!$wp_query->is_404() && !$wp_query->is_favicon())
-            setcookie('_hf_nocache', '', time() - 315360000, $cookie_path);
+            setcookie('hf_skip_cache', '', time() - 315360000, $cookie_path);
         }
       }
 
