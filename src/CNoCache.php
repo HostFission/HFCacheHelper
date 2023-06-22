@@ -46,7 +46,7 @@ namespace HF\CacheHelper
     {
       // there doesn't seem to be an eloquent way to do this
       $current_url = $_SERVER['REQUEST_URI'];
-      return preg_match('/([a-z0-9_-]+-sitemap|sitemap(_index)?)\.xml$/', $current_url);
+      return preg_match('#\/[^/]*sitemap[^/]*\.xml$#', $current_url);
     }
   }
 }
