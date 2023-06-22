@@ -115,6 +115,7 @@ namespace HF\CacheHelper
     public static function shutdown()
     {
       global $wpdb;
+      global $wp_query;
 
       remove_action('nonce_user_logged_out', [__CLASS__, 'nonce']);
       $data = [];
