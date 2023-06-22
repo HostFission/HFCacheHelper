@@ -29,6 +29,11 @@ namespace HF\CacheHelper
       register_activation_hook  (__FILE__, [__CLASS__, 'activate'  ]);
       register_deactivation_hook(__FILE__, [__CLASS__, 'deactivate']);
 
+      // do not activate if the HF_CACHE env var is not set to prevent leaking
+      // nonce values if the server this is installed on isn't compatible
+      if (!getenv('HF_CACHE'))
+        return;
+
       add_action('template_redirect'     , [__CLASS__, 'buffer'  ]);
       add_action('nonce_user_logged_out' , [__CLASS__, 'nonce'   ], 10, 2);
       add_action('shutdown'              , [__CLASS__, 'shutdown'], 0);
