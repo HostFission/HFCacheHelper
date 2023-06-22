@@ -46,7 +46,7 @@ namespace HF\CacheHelper
     {
       // there doesn't seem to be an eloquent way to do this
       $current_url = $_SERVER['REQUEST_URI'];
-      return strpos($current_url, '/sitemap.xml') !== false;
+      return strpos($current_url, '/wp-sitemap.xml') !== false;
     }
   }
 }
