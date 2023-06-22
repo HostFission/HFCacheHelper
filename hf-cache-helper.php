@@ -128,7 +128,7 @@ namespace HF\CacheHelper
         $wpdb->query($stmt);
       }
 
-      if (!headers_sent())
+      if (!headers_sent() && is_page())
       {
         $root_url    = site_url();
         $parsed_url  = parse_url( $root_url );
