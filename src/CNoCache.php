@@ -21,13 +21,15 @@ namespace HF\CacheHelper
     }
 
     // if WooCommerce is installed and has an active session
+    // and has items in the cart
     private static function wooCommerce()
     {
       if (!class_exists('WooCommerce'))
         return false;
 
       return isset(WC()->session) &&
-        WC()->session->has_session();
+        WC()->session->has_session() &&
+        !WC()->cart->is_empty();
     }
   }
 }
