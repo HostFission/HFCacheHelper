@@ -6,11 +6,16 @@ namespace HF\CacheHelper
     // returns true if we should not cache the page
     public static function check()
     {
+      global $pagenow;
+
       return
         defined('XMLRPC_REQUEST')           ||
         defined('DOING_RPC')                ||
         $_SERVER['REQUEST_METHOD'] != 'GET' ||
         is_user_logged_in()                 ||
+        $pagenow === 'wp-login.php'         ||
+        $pagenow === 'wp-register.php'      ||
+        is_admin()                          ||
         self::wooCommerce()                 ||
         apply_filters('do_not_cache', false);
     }
